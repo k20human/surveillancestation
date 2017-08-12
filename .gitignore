@@ -102,3 +102,6 @@ ENV/
 
 # IDE
 .idea
+
+# Configuration
+config.json

@@ -1,0 +1,128 @@
+import json
+import logging
+import requests
+
+from .errors import errors
+
+
+class Api:
+    def __init__(self, host, user, passwd):
+        self.host = host
+        self.user = user
+        self.passwd = passwd
+        self.sid = ''
+        self.logged_in = False
+        self.session_name = 'SurveillanceStation'
+        self.login()
+
+    def login(self):
+        data = self.req('SYNO.API.Info', self.endpoint('SYNO.API.Info',
+                                      query='SYNO.API.Auth,SYNO.SurveillanceStation.'))
+        login_endpoint = self.endpoint(
+            'SYNO.API.Auth',
+            version=str(data['SYNO.API.Auth']['maxVersion']),
+            cgi=data['SYNO.API.Auth']['path'],
+            method='login',
+            extra={
+                'account': self.user,
+                'passwd': self.passwd,
+                'session': self.session_name,
+                'format': 'sid'
+            }
+        )
+        data2 = self.req('SYNO.API.Auth', login_endpoint)
+        if not 'code' in data2:
+            self.sid = data2['sid']
+            self.logged_in = True
+
+    def logout(self):
+        logout_endpoint = self.endpoint(
+            'SYNO.API.Auth',
+            cgi='auth.cgi',
+            method='logout',
+            extra={'session': self.session_name}
+        )
+        self.req('SYNO.API.Auth', logout_endpoint)
+
+    def base_endpoint(self, cgi):
+        ret = self.host + '/webapi/' + cgi
+        return ret
+
+    def get_max_version(self, api):
+        data = self.req('SYNO.API.Info', self.endpoint('SYNO.API.Info',
+                                      query=api))
+        return str(data[api]['maxVersion'])
+
+    def endpoint(self, api, query='', cgi='query.cgi', version='1', method='query', extra={}):
+        ret = self.base_endpoint(cgi) + '?api=' + api + '&version=' + version + '&method=' + method
+
+        if query:
+            ret += '&query=' + query
+
+        for key, value in extra.items():
+            ret += '&' + key + '=' + str(value)
+
+        if self.sid:
+            ret += '&_sid=' + self.sid
+
+        return ret
+
+    def req(self, api_name, endpoint):
+        logging.info('GET: ' + endpoint)
+        r = requests.get(endpoint, verify=False)
+
+        return self.get_response_data(api_name, r)
+
+    def req_binary(self, api_name, endpoint, **kw):
+        logging.info('GET: ' + endpoint)
+        r = requests.get(endpoint, **kw)
+
+        if self.is_response_binary(r):
+            if "stream" in kw:
+                return r
+            else:
+                return r.content
+
+        self.get_response_data(api_name, r)
+
+        return None
+
+    def req_post(self, api_name, endpoint, data, files):
+        logging.info('url: ' + endpoint)
+        try:
+            r = requests.post(endpoint, verify=False, data=data, files=files)
+        except:
+            return None
+
+        return self.get_response_data(api_name, r)
+
+    def get_response_data(self, api_name, response):
+        if response.status_code != 200:
+            logging.error('http status: ' + str(response.status_code))
+
+        # Status 500
+        if response.status_code == 500:
+            return {'Error': errors[500]}
+
+        try:
+            response_json = response.json()
+        except json.JSONDecodeError:
+            return response.content
+
+        if response_json['success'] == True:
+            if 'data' in response_json.keys():
+                return response_json['data']
+            return ''
+
+        # Get error message
+        code = response_json['error']['code']
+        if code not in errors:
+            error_message = errors[api_name][code]
+        else:
+            error_message = errors[code]
+
+        logging.error('failure - ' + str(response_json['error']['code']) + ' - ' + error_message)
+        return response_json['error']
+
+    def is_response_binary(self, response):
+        return 'text/plain' not in response.headers['content-type']

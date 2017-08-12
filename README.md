@@ -1,9 +1,6 @@
-# surveillance-station
-Synology Surveillance Station API in Python
-
 # Synology Surveillance Station API in Python
 
-[![Build Status](https://travis-ci.org/k20human/surveillance-station.svg)](https://travis-ci.org/k20human/surveillance-station)
+[![Build Status](https://travis-ci.org/k20human/surveillancestation.svg)](https://travis-ci.org/k20human/surveillancestation)
 
 Python3 binding to Synology Surveillance API. I refer to the following document:
 [Surveillance_Station_Web_API_v2.0.pdf](https://global.download.synology.com/download/Document/DeveloperGuide/Surveillance_Station_Web_API_v2.0.pdf).
@@ -14,6 +11,7 @@ Python3 binding to Synology Surveillance API. I refer to the following document:
 
 | Endpoint                                      | Description                                                                                                                                                                                          |
 |-----------------------------------------------|--------------------------------------------------------------------|
+| SYNO.SurveillanceStation.Info                 | Retrieve Surveillance Station-related general information          |
 
 ### Partial
 
@@ -25,9 +23,6 @@ Python3 binding to Synology Surveillance API. I refer to the following document:
 
 | Endpoint                                      | Description                                                                                                                                                                                          |
 |-----------------------------------------------|--------------------------------------------------------------------|
-| SYNO.API.Info                                 | Discover all API information                                       |
-| SYNO.API.Auth                                 | Perform session login and logout                                   |
-| SYNO.SurveillanceStation.Info                 | Retrieve Surveillance Station-related general information          |
 | SYNO.SurveillanceStation.Camera               | Retrieve camera-related information                                |
 | SYNO.SurveillanceStation.PTZ                  | Perform camera PTZ actions                                         |
 | SYNO.SurveillanceStation.ExternalRecording    | Control external recording of cameras                              |
@@ -42,14 +37,25 @@ Python3 binding to Synology Surveillance API. I refer to the following document:
 ## Install
 
 ```bash
-pip install [--upgrade] https://github.com/k20human/surveillance-station/tarball/master#egg=surveillance-station
+pip install [--upgrade] https://github.com/k20human/surveillancestation/tarball/master#egg=surveillance-station
 ```
 
 ## Usage
 ```python
+# Create API
+api = Api(host=config['host'], user=config['login'], passwd=config['password'])
 
+# Create API Info
+info = Info(api)
+
+# Get Surveillance Station infos
+print('Get info')
+jsonprint(info.get_info())
+
+# Don't forget to logout
+api.logout()
 ```
 
-## Other implementations
+## Inspiration
 
 - https://github.com/satreix/synology ([sources](https://github.com/satreix/synology)) Python API for communication with Synology Filestation
