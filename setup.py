@@ -9,8 +9,6 @@ setup(name='surveillancestation',
       license='MIT',
       packages=['surveillancestation'],
       install_requires=[
-            'requests',
-            'json',
-            'logging'
+            'requests'
       ],
       zip_safe=False)
