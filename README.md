@@ -9,21 +9,20 @@ Python3 binding to Synology Surveillance API. I refer to the following document:
 
 ### Implemented
 
-| Endpoint                                      | Description                                                                                                                                                                                          |
+| Endpoint                                      | Description                                                        |
 |-----------------------------------------------|--------------------------------------------------------------------|
 | SYNO.SurveillanceStation.Info                 | Retrieve Surveillance Station-related general information          |
 
 ### Partial
 
-| Endpoint                                      | Description                                                                                                                                                                                          |
-|-----------------------------------------------|--------------------------------------------------------------------|
-
+| Endpoint                                      | Description                                         | Missing                          |
+|-----------------------------------------------|-----------------------------------------------------|----------------------------------|
+| SYNO.SurveillanceStation.Camera               | Retrieve camera-related information                 | SaveOptimizeParam, *SYNO.SurveillanceStation.Camera.Event*, *SYNO.SurveillanceStation.Camera.Group*, *SYNO.SurveillanceStation.Camera.Import*, *SYNO.SurveillanceStation.Camera.Wizard* |
 
 ### TODO
 
-| Endpoint                                      | Description                                                                                                                                                                                          |
+| Endpoint                                      | Description                                                        |
 |-----------------------------------------------|--------------------------------------------------------------------|
-| SYNO.SurveillanceStation.Camera               | Retrieve camera-related information                                |
 | SYNO.SurveillanceStation.PTZ                  | Perform camera PTZ actions                                         |
 | SYNO.SurveillanceStation.ExternalRecording    | Control external recording of cameras                              |
 | SYNO.SurveillanceStation.Event                | Query event information                                            |
