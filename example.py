@@ -2,8 +2,7 @@
 
 import logging
 
-from surveillancestation.api import Api
-from surveillancestation.info import Info
+from surveillancestation.surveillancestation import Surveillancestation
 from surveillancestation.utils import jsonprint
 
 import json
@@ -40,14 +39,11 @@ else:
     sys.exit('Your configuration file doesn\'t exists')
 
 # Create API
-api = Api(host=config['host'], user=config['login'], passwd=config['password'])
-
-# Create API Info
-info = Info(api)
+api = Surveillancestation(host=config['host'], user=config['login'], passwd=config['password'])
 
 # Get Surveillance Station infos
 print('Get info')
-jsonprint(info.get_info())
+jsonprint(api.info.get_info())
 
 # Don't forget to logout
 api.logout()
