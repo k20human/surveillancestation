@@ -20,5 +20,10 @@ errors = {
     },
     'SYNO.SurveillanceStation.Info': {
         400: 'Execution failed'
-    }
+    },
+    'SYNO.SurveillanceStation.Camera': {
+        400: 'Execution failed',
+        401: 'Parameter invalid',
+        402: 'Camera disabled'
+    },
 }
