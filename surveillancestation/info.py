@@ -1,20 +1,19 @@
 import os
 import time
-
 from .api import Api
 
 
 class Info:
     def __init__(self, api: Api):
-        self.api = api
-        self.cgi_path = 'entry.cgi'
-        self.api_name = 'SYNO.SurveillanceStation.Info'
-        self.version = api.get_max_version(self.api_name)
+        self._api = api
+        self._cgi_path = 'entry.cgi'
+        self._api_name = 'SYNO.SurveillanceStation.Info'
+        self._version = api.get_max_version(self._api_name)
 
-    """Provide Surveillance Station information"""
+    """Get Surveillance Station information"""
 
     def get_info(self):
-        return self.api.req(self.api_name, self.api.endpoint(api=self.api_name,
-                                              cgi=self.cgi_path,
-                                              version=self.version,
-                                              method='GetInfo'))
+        return self._api.req(self._api_name, self._api.endpoint(api=self._api_name,
+                                                                cgi=self._cgi_path,
+                                                                version=self._version,
+                                                                method='GetInfo'))
