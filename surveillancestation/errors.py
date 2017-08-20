@@ -11,6 +11,8 @@ errors = {
     400: 'Execution failed',
     401: 'Parameter invalid',
     402: 'Camera disabled',
+    403: 'Insufficient license',
+    405: 'Not Allowed',
     407: 'CMS closed',
     500: 'Server error',
 
@@ -21,5 +23,8 @@ errors = {
         402: 'Permission denied',
         403: 'One time password not specified',
         404: 'One time password authenticate failed'
+    },
+    'SYNO.SurveillanceStation.Notification.Schedule': {
+        404: 'Codec acitvation failed'
     }
 }

@@ -29,17 +29,13 @@ class Api:
                 'account': self._user,
                 'passwd': self._passwd,
                 'session': self._session_name,
-                'format': 'sid'
+                'format': 'cookie'
             }
         )
         data2 = self.req('SYNO.API.Auth', login_endpoint)
         if not 'code' in data2:
             self._sid = data2['sid']
             self._logged_in = True
-
-    def _base_endpoint(self, cgi):
-        ret = self._host + '/webapi/' + cgi
-        return ret
 
     def _get_response_data(self, api_name, response):
         if response.status_code != 200:
@@ -69,7 +65,7 @@ class Api:
             error_message = str(response_json['error']['code'])
 
         logging.error('failure - ' + str(response_json['error']['code']) + ' - ' + error_message)
-        return response_json['error']
+        raise Exception(response_json['error'])
 
     def _is_response_binary(self, response):
         return 'text/plain' not in response.headers['content-type']
@@ -88,15 +84,19 @@ class Api:
         )
         self.req('SYNO.API.Auth', logout_endpoint)
 
+    def base_endpoint(self, cgi):
+        ret = self._host + '/webapi/' + cgi
+        return ret
+
     def endpoint(self, api, query='', cgi='query.cgi', version='1', method='query', extra={}):
-        ret = self._base_endpoint(cgi) + '?api=' + api + '&version=' + str(version) + '&method=' + method
+        ret = self.base_endpoint(cgi) + '?api=' + api + '&version=' + str(version) + '&method=' + method
 
         if query:
             ret += '&query=' + query
 
         for key, value in extra.items():
             if value:
-                if isinstance(value, dict):
+                if isinstance(value, dict) or isinstance(value, list):
                    value = json.dumps(value)
                 else:
                     value = str(value)
@@ -129,11 +129,14 @@ class Api:
 
         return None
 
-    def req_post(self, api_name, endpoint, data, files):
-        logging.info('url: ' + endpoint)
+    def req_post(self, api_name, endpoint, data, files=None):
+        logging.info('POST: ' + endpoint)
         try:
             r = requests.post(endpoint, verify=False, data=data, files=files)
         except:
             return None
 
         return self._get_response_data(api_name, r)
+
+    def getSid(self):
+        return self._sid

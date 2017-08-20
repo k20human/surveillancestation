@@ -19,6 +19,7 @@ Python3 binding to Synology Surveillance API. I refer to the following document:
 |-----------------------------------------------|-----------------------------------------------------|----------------------------------|
 | SYNO.SurveillanceStation.Camera               | Retrieve camera-related information                 | SaveOptimizeParam, *SYNO.SurveillanceStation.Camera.Event*, *SYNO.SurveillanceStation.Camera.Import* |
 | SYNO.SurveillanceStation.ActionRule           | Provides a method to acquire information of ActionRule |  |
+| SYNO.SurveillanceStation.Notification         | Control notification                               | *SYNO.SurveillanceStation.Notification.SMS*, *SYNO.SurveillanceStation.Notification.PushService*, *SYNO.SurveillanceStation.Notification.Email*, *SYNO.SurveillanceStation.Notification.Filter* |
 
 ### TODO
 
@@ -32,7 +33,6 @@ Python3 binding to Synology Surveillance API. I refer to the following document:
 | SYNO.SurveillanceStation.Streaming            | Get video stream of live view and recorded events                  |
 | SYNO.SurveillanceStation.AudioStream          | Get audio stream of live view                                      |
 | SYNO.SurveillanceStation.VideoStream          | Get video stream of live view                                      |
-| SYNO.SurveillanceStation.Notification         | Get authorized token of DS                                         |
 
 ## Install
 
