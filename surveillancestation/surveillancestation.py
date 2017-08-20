@@ -11,20 +11,16 @@ class Surveillancestation:
         self._api = Api(host=host, user=user, passwd=passwd)
 
         # API list
-        self._api_info = None
-        self._api_camera = None
+        self._api_info = Info(self._api)
+        self._api_camera = Camera(self._api)
 
     def logout(self):
         self._api.logout()
 
     @property
-    def info(self):
-        if self._api_info is None:
-            self._api_info = Info(self._api)
+    def info(self) -> Info:
         return self._api_info
 
     @property
-    def camera(self):
-        if self._api_camera is None:
-            self._api_camera = Camera(self._api)
+    def camera(self) -> Camera:
         return self._api_camera

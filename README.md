@@ -17,7 +17,8 @@ Python3 binding to Synology Surveillance API. I refer to the following document:
 
 | Endpoint                                      | Description                                         | Missing                          |
 |-----------------------------------------------|-----------------------------------------------------|----------------------------------|
-| SYNO.SurveillanceStation.Camera               | Retrieve camera-related information                 | SaveOptimizeParam, *SYNO.SurveillanceStation.Camera.Event*, *SYNO.SurveillanceStation.Camera.Group*, *SYNO.SurveillanceStation.Camera.Import*, *SYNO.SurveillanceStation.Camera.Wizard* |
+| SYNO.SurveillanceStation.Camera               | Retrieve camera-related information                 | SaveOptimizeParam, *SYNO.SurveillanceStation.Camera.Event*, *SYNO.SurveillanceStation.Camera.Import* |
+| SYNO.SurveillanceStation.ActionRule           | Provides a method to acquire information of ActionRule |  |
 
 ### TODO
 
@@ -42,14 +43,11 @@ pip install [--upgrade] https://github.com/k20human/surveillancestation/tarball/
 ## Usage
 ```python
 # Create API
-api = Api(host=config['host'], user=config['login'], passwd=config['password'])
-
-# Create API Info
-info = Info(api)
+api = Surveillancestation(host=config['host'], user=config['login'], passwd=config['password'])
 
 # Get Surveillance Station infos
 print('Get info')
-jsonprint(info.get_info())
+jsonprint(api.info.get_info())
 
 # Don't forget to logout
 api.logout()

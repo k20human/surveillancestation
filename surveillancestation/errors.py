@@ -26,4 +26,16 @@ errors = {
         401: 'Parameter invalid',
         402: 'Camera disabled'
     },
+    'SYNO.SurveillanceStation.Camera.Group': {
+        400: 'Execution failed',
+        401: 'Parameter invalid',
+        402: 'Camera disabled',
+        407: 'CMS closed'
+    },
+    'SYNO.SurveillanceStation.Camera.Wizard': {
+        400: 'Execution failed',
+        401: 'Parameter invalid',
+        402: 'Camera disabled',
+        407: 'CMS closed'
+    },
 }

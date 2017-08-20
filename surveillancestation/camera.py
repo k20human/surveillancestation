@@ -2,6 +2,82 @@ import os
 import time
 from .api import Api
 
+class CameraWizard:
+    def __init__(self, api: Api):
+        self._api = api
+        self._cgi_path = 'entry.cgi'
+        self._api_name = 'SYNO.SurveillanceStation.Camera.Wizard'
+        self._version = api.get_max_version(self._api_name)
+
+    """Enumerate group information. e.g. Group list and camera list in the group"""
+
+    def cam_save_all(self, data={
+        'camServerId': '',
+        'camId': '',
+        'camName': '',
+        'camIP': '',
+        'camPort': '',
+        'camDevice': '',
+        'camTvStandard': '',
+        'camChannel': '',
+        'camSourcePath': '',
+        'camUserName': '',
+        'camPassWord': '',
+        'camFolder': '',
+        'camPrefix': '',
+        'blEditBeforeEn': '',
+        'camVideoType': '',
+        'camStreamingType': '',
+        'camIsEnableAudio': '',
+        'camAudioType': '',
+        'camFov': '',
+        'camRecStreamNo': '',
+        'camResolution': '',
+        'camFps': '',
+        'camRecBitrateCtrl': '',
+        'camLiveQuality': '',
+        'camLiveCbrBitrate': '',
+        'camMobileStreamNo': '',
+        'camMobileResolution': '',
+        'camMobileFps': '',
+        'camMobileBitrateCtrl': '',
+        'camMobileQuality': '',
+        'camMobileCbrBitrate': '',
+        'camRecTime': '',
+        'camPreRecTime': '',
+        'camPostRecTime': '',
+        'camIsRotByDate': '',
+        'camRotByDate': '',
+        'camIsRotBySpace': '',
+        'camRotBySpace': '',
+        'camRotOption': '',
+        'edgeStgEnabled': '',
+        'edgeStgRecMode': '',
+        'edgeStgRecDays': '',
+        'edgeStgRecStartTime': '',
+        'edgeStgRecStopTime': '',
+        'edgeStgRetrieve': '',
+        'edgeStgDownloadSch': '',
+        'camSchedule': '',
+        'customDetect': '',
+        'customAlarmDetect': '',
+        'camLiveMode': '',
+        'camMountType': '',
+        'camRtspProtocol': '',
+        'mdDetSrc': '',
+        'uiStmNoList': '',
+        '': '',
+    }, cam_id='', act_from_host=False):
+        return self._api.req(self._api_name, self._api.endpoint(api=self._api_name,
+                                                                cgi=self._cgi_path,
+                                                                version=self._version,
+                                                                method='CamSaveAll',
+                                                                extra={
+                                                                    'data': data,
+                                                                    'camId': cam_id,
+                                                                    'actFromHost': act_from_host
+                                                                }))
+
 class CameraGroup:
     def __init__(self, api: Api):
         self._api = api
@@ -9,21 +85,36 @@ class CameraGroup:
         self._api_name = 'SYNO.SurveillanceStation.Camera.Group'
         self._version = api.get_max_version(self._api_name)
 
+    """Enumerate group information. e.g. Group list and camera list in the group"""
+
+    def enum(self, priv_cam_type):
+        return self._api.req(self._api_name, self._api.endpoint(api=self._api_name,
+                                                                cgi=self._cgi_path,
+                                                                version=self._version,
+                                                                method='Enum',
+                                                                extra={
+                                                                    'privCamType': priv_cam_type
+                                                                }))
+
+
 class Camera:
     def __init__(self, api: Api):
         self._api = api
         self._cgi_path = 'entry.cgi'
         self._api_name = 'SYNO.SurveillanceStation.Camera'
-        self._version = api.get_max_version(self._api_name)
+        self._version = 7  # API version > 7 not document
 
         # Sub API
-        self._sub_api_group = None
+        self._sub_api_group = CameraGroup(self._api)
+        self._sub_api_wizard = CameraWizard(self._api)
 
     @property
-    def group(self):
-        if self._sub_api_group is None:
-            self._sub_api_group = CameraGroup(self._api)
+    def group(self) -> CameraGroup:
         return self._sub_api_group
+
+    @property
+    def wizard(self) -> CameraWizard:
+        return self._sub_api_wizard
 
     """Get the list of all cameras"""
 

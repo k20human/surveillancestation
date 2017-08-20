@@ -1,9 +1,9 @@
 import json
 import logging
 import requests
+import urllib3
 
 from .errors import errors
-from .info import Info
 
 
 class Api:
@@ -14,6 +14,7 @@ class Api:
         self._sid = ''
         self._logged_in = False
         self._session_name = 'SurveillanceStation'
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         self._login()
 
     def _login(self):
@@ -42,7 +43,7 @@ class Api:
 
     def _get_response_data(self, api_name, response):
         if response.status_code != 200:
-            logging.error('http status: ' + str(response.status_code))
+            logging.error('HTTP status: ' + str(response.status_code))
 
         # Status 500
         if response.status_code == 500:
@@ -86,14 +87,20 @@ class Api:
         self.req('SYNO.API.Auth', logout_endpoint)
 
     def endpoint(self, api, query='', cgi='query.cgi', version='1', method='query', extra={}):
-        ret = self._base_endpoint(cgi) + '?api=' + api + '&version=' + version + '&method=' + method
+        ret = self._base_endpoint(cgi) + '?api=' + api + '&version=' + str(version) + '&method=' + method
 
         if query:
             ret += '&query=' + query
 
         for key, value in extra.items():
             if value:
+                if isinstance(value, dict):
+                   value = json.dumps(value)
+                else:
+                    value = str(value)
+
                 ret += '&' + key + '=' + str(value)
+
 
         if self._sid:
             ret += '&_sid=' + self._sid
