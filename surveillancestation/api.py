@@ -61,10 +61,12 @@ class Api:
 
         # Get error message
         code = response_json['error']['code']
-        if code not in errors:
+        if code in errors:
+            error_message = errors[code]
+        elif api_name in errors and code in errors[api_name]:
             error_message = errors[api_name][code]
         else:
-            error_message = errors[code]
+            error_message = str(response_json['error']['code'])
 
         logging.error('failure - ' + str(response_json['error']['code']) + ' - ' + error_message)
         return response_json['error']

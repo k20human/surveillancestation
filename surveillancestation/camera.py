@@ -9,7 +9,7 @@ class CameraWizard:
         self._api_name = 'SYNO.SurveillanceStation.Camera.Wizard'
         self._version = api.get_max_version(self._api_name)
 
-    """Enumerate group information. e.g. Group list and camera list in the group"""
+    """Save the configuration of the camera when adding or editing"""
 
     def cam_save_all(self, data={
         'camServerId': '',

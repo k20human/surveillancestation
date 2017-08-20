@@ -8,6 +8,10 @@ errors = {
     105: 'The logged in session does not have permission',
     106: 'Session timeout',
     107: 'Session interrupted by duplicate login',
+    400: 'Execution failed',
+    401: 'Parameter invalid',
+    402: 'Camera disabled',
+    407: 'CMS closed',
     500: 'Server error',
 
     'SYNO.API.Auth': {
@@ -17,25 +21,5 @@ errors = {
         402: 'Permission denied',
         403: 'One time password not specified',
         404: 'One time password authenticate failed'
-    },
-    'SYNO.SurveillanceStation.Info': {
-        400: 'Execution failed'
-    },
-    'SYNO.SurveillanceStation.Camera': {
-        400: 'Execution failed',
-        401: 'Parameter invalid',
-        402: 'Camera disabled'
-    },
-    'SYNO.SurveillanceStation.Camera.Group': {
-        400: 'Execution failed',
-        401: 'Parameter invalid',
-        402: 'Camera disabled',
-        407: 'CMS closed'
-    },
-    'SYNO.SurveillanceStation.Camera.Wizard': {
-        400: 'Execution failed',
-        401: 'Parameter invalid',
-        402: 'Camera disabled',
-        407: 'CMS closed'
-    },
+    }
 }
